@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 76" width="52" height="76" fill="none" role="img" aria-label="NEO Arcana">
+  <title>NEO Arcana</title>
+  <path class="na-card-outline" pathLength="1" d="M8 2H44A6 6 0 0 1 50 8V68A6 6 0 0 1 44 74H8A6 6 0 0 1 2 68V8A6 6 0 0 1 8 2Z" stroke="#B9A7E8" stroke-width="2.4" stroke-linejoin="round"/>
+  <path class="na-moon" d="M32 25A13 13 0 0 0 32 51A16 16 0 0 1 32 25Z" fill="#B9A7E8"/>
+</svg>

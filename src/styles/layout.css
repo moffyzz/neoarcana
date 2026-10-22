@@ -1,0 +1,246 @@
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding: max(0.35rem, env(safe-area-inset-top))
+    max(1rem, env(safe-area-inset-right)) 0.35rem
+    max(1rem, env(safe-area-inset-left));
+  background: transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    backdrop-filter var(--dur-fast) var(--ease-out);
+}
+
+.site-header.is-scrolled {
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+body.is-modal-open .site-header {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.header__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.header__nav a:hover {
+  color: var(--accent-hover);
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 5.5rem max(1.25rem, env(safe-area-inset-right)) 3.5rem
+    max(1.25rem, env(safe-area-inset-left));
+  text-align: center;
+  overflow: clip;
+}
+
+.hero__glow {
+  position: absolute;
+  inset: 12% 8%;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--accent) 12%, transparent),
+    transparent 68%
+  );
+  pointer-events: none;
+  opacity: 0;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  max-width: 52rem;
+}
+
+.hero__title {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.hero__letter,
+.hero__space {
+  display: inline-block;
+}
+
+.hero__space {
+  width: 0.35em;
+}
+
+.hero__tagline {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+  max-width: 28ch;
+}
+
+.hero__rule {
+  display: block;
+  width: 44px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+}
+
+.scroll-hint__line {
+  width: 1px;
+  height: 2.25rem;
+  background: var(--accent);
+  opacity: 0.55;
+}
+
+.scroll-hint__dot {
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.section {
+  width: min(
+    72rem,
+    calc(100% - 2rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px))
+  );
+  margin: 0 auto;
+  padding: 4.5rem 0 6rem;
+  scroll-margin-top: 4.75rem;
+  min-height: 70svh;
+}
+
+.section .title-section + .lede,
+.deck__intro .title-section + .lede {
+  margin-top: 0.75rem;
+}
+
+.lede {
+  color: var(--text-muted);
+  max-width: 60ch;
+}
+
+@media (min-width: 640px) {
+  .site-header {
+    padding-inline: max(1.5rem, env(safe-area-inset-left))
+      max(1.5rem, env(safe-area-inset-right));
+  }
+
+  .section {
+    width: min(
+      72rem,
+      calc(100% - 3rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px))
+    );
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero__inner {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section {
+    width: min(
+      76rem,
+      calc(100% - 4rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px))
+    );
+    padding: 5.5rem 0 7rem;
+  }
+
+  .hero__tagline {
+    font-size: 1.125rem;
+  }
+
+  .lede {
+    font-size: 1.0625rem;
+  }
+}
+
+.site-footer {
+  display: grid;
+  justify-items: center;
+  gap: 0.65rem;
+  padding: 3rem max(1.25rem, env(safe-area-inset-right))
+    max(3.5rem, env(safe-area-inset-bottom))
+    max(1.25rem, env(safe-area-inset-left));
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.logo-mark--footer {
+  height: 40px;
+  color: var(--accent);
+}
+
+.site-footer__mark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.site-footer__note {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+}

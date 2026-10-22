@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#12101A" />
+    <meta
+      name="description"
+      content="NEO Arcana: п'ять людей, п'ять арканів Таро, один розклад. Командний проєкт Humans of Neoversity."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:title" content="NEO Arcana — Humans of Neoversity" />
+    <meta
+      property="og:description"
+      content="NEO Arcana: п'ять людей, п'ять арканів Таро, один розклад. Командний проєкт Humans of Neoversity."
+    />
+    <meta property="og:image" content="./assets/og/og-cover.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="NEO Arcana — Humans of Neoversity" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEO Arcana — Humans of Neoversity" />
+    <meta
+      name="twitter:description"
+      content="NEO Arcana: п'ять людей, п'ять арканів Таро, один розклад. Командний проєкт Humans of Neoversity."
+    />
+    <meta name="twitter:image" content="./assets/og/og-cover.svg" />
+    <title>NEO Arcana — Humans of Neoversity</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти до змісту</a>
+    <canvas class="starfield" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="header__logo" href="#hero" aria-label="NEO Arcana, нагору">
+        <svg
+          class="logo-mark logo-mark--header"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 52 76"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            class="na-card-outline"
+            pathLength="1"
+            d="M8 2H44A6 6 0 0 1 50 8V68A6 6 0 0 1 44 74H8A6 6 0 0 1 2 68V8A6 6 0 0 1 8 2Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linejoin="round"
+          />
+          <path class="na-moon" d="M32 25A13 13 0 0 0 32 51A16 16 0 0 1 32 25Z" fill="currentColor" />
+        </svg>
+      </a>
+      <nav class="header__nav" aria-label="Розділи">
+        <a href="#deck">Колода</a>
+        <a href="#team">Команда</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section id="hero" class="hero" aria-labelledby="hero-title">
+        <div class="hero__glow" aria-hidden="true"></div>
+        <div class="hero__inner">
+          <svg
+            class="logo-mark logo-mark--hero"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 52 76"
+            role="img"
+            aria-label="NEO Arcana"
+          >
+            <title>NEO Arcana</title>
+            <path
+              class="na-card-outline"
+              pathLength="1"
+              d="M8 2H44A6 6 0 0 1 50 8V68A6 6 0 0 1 44 74H8A6 6 0 0 1 2 68V8A6 6 0 0 1 8 2Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linejoin="round"
+            />
+            <path class="na-moon" d="M32 25A13 13 0 0 0 32 51A16 16 0 0 1 32 25Z" fill="currentColor" />
+          </svg>
+          <p class="wordmark-sub hero__reveal" data-bind="subtitle">HUMANS OF NEOVERSITY</p>
+          <span class="hero__rule" aria-hidden="true"></span>
+          <h1 class="title-hero hero__title" id="hero-title" data-bind="title">NEO ARCANA</h1>
+          <p class="hero__tagline hero__reveal" data-bind="tagline">
+            П'ять людей. П'ять арканів. Один розклад.
+          </p>
+          <a class="btn hero__reveal" href="#deck">Витягни карту</a>
+        </div>
+        <div class="scroll-hint" aria-hidden="true">
+          <span class="scroll-hint__line"></span>
+          <span class="scroll-hint__dot"></span>
+        </div>
+      </section>
+
+      <section id="deck" class="section section--deck" aria-labelledby="deck-title">
+        <div class="deck__head">
+          <div class="deck__intro">
+            <h2 class="title-section" id="deck-title">Наша колода</h2>
+            <p class="lede">Обери карту, щоб дізнатися історію</p>
+          </div>
+          <p class="deck__count" aria-live="polite">
+            Відкрито <span data-deck-viewed>0</span> з <span data-deck-total>5</span>
+          </p>
+        </div>
+        <div class="deck-scroller">
+          <ol class="deck" id="deck-list"></ol>
+        </div>
+        <div class="deck__dots" id="deck-dots" aria-label="Навігація колодою"></div>
+      </section>
+
+      <section id="team" class="section" aria-labelledby="team-title">
+        <h2 class="title-section" id="team-title" data-bind="teamTitle">Хто ми як команда</h2>
+        <p class="lede" data-bind="teamIntro">
+          Розклад, у якому кожна карта сильніша разом з іншими.
+        </p>
+        <div class="spread" id="team-spread"></div>
+        <div class="spread-line" id="team-line" aria-hidden="true"></div>
+      </section>
+
+      <section id="finale" class="section finale" aria-labelledby="finale-title">
+        <h2 class="title-section" id="finale-title" data-bind="worldTitle">Остання карта</h2>
+        <div class="world is-locked" id="world">
+          <button
+            class="world__card"
+            type="button"
+            data-world-card
+            aria-describedby="world-caption"
+          >
+            <span class="world__glow" aria-hidden="true"></span>
+            <span class="world__burst" aria-hidden="true"></span>
+            <span class="world__inner">
+              <span class="world__face world__back" aria-hidden="true">
+                <span class="world__back-frame"></span>
+                <img
+                  class="world__back-logo"
+                  src="./assets/logo/neo-arcana-moon-card.svg"
+                  alt=""
+                  width="96"
+                  height="140"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+              <span class="world__face world__front">
+                <span class="world__roman" data-bind="worldNumber">XXI</span>
+                <span class="label" data-bind="worldUk">Світ</span>
+                <p class="world__prophecy" data-world-prophecy></p>
+              </span>
+            </span>
+          </button>
+          <p class="world__caption" id="world-caption">
+            Відкрий усі п'ять карт, щоб побачити розклад повністю
+            <span class="world__progress">
+              <span data-finale-viewed>0</span> / <span data-finale-total>5</span>
+            </span>
+          </p>
+          <button class="world__skip" type="button" data-world-skip>
+            Показати одразу
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <svg
+        class="logo-mark logo-mark--footer"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 52 76"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          class="na-card-outline"
+          d="M8 2H44A6 6 0 0 1 50 8V68A6 6 0 0 1 44 74H8A6 6 0 0 1 2 68V8A6 6 0 0 1 8 2Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.4"
+          stroke-linejoin="round"
+        />
+        <path class="na-moon" d="M32 25A13 13 0 0 0 32 51A16 16 0 0 1 32 25Z" fill="currentColor" />
+      </svg>
+      <p class="site-footer__mark">NEO ARCANA · Humans of Neoversity · 2026</p>
+      <p class="site-footer__note">Neoversity</p>
+    </footer>
+
+    <div
+      class="profile-modal"
+      id="profile-modal"
+      hidden
+      inert
+      aria-hidden="true"
+    >
+      <div class="profile-modal__backdrop" data-modal-close tabindex="-1"></div>
+      <div
+        class="profile-modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="profile-name"
+      >
+        <button
+          class="profile-modal__close"
+          type="button"
+          data-modal-close
+          aria-label="Закрити профіль"
+        >
+          <svg
+            class="profile-modal__close-icon"
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M1.5 1.5l11 11M12.5 1.5l-11 11"
+              stroke="currentColor"
+              stroke-width="1.25"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+
+        <div class="profile-modal__layout">
+          <div class="profile-modal__media">
+            <div class="profile-modal__portrait" data-profile-portrait>
+              <div class="profile-modal__art" data-profile-art>
+                <img
+                  class="profile-modal__img"
+                  data-profile-img
+                  alt=""
+                  width="1200"
+                  height="1500"
+                  loading="lazy"
+                  decoding="async"
+                  hidden
+                />
+                <div class="profile-modal__ph" data-profile-ph aria-hidden="true">
+                  <span class="card__roman" data-profile-roman></span>
+                  <span class="card__initials" data-profile-initials></span>
+                </div>
+              </div>
+            </div>
+            <div class="profile-modal__links" data-profile-links hidden></div>
+          </div>
+
+          <div class="profile-modal__body" data-profile-body>
+            <p class="label profile-modal__reveal" data-profile-label></p>
+            <h2 class="title-name profile-modal__reveal" id="profile-name" data-profile-name></h2>
+            <p class="profile-modal__power profile-modal__reveal" data-profile-power></p>
+            <hr class="profile-modal__rule profile-modal__reveal" />
+
+            <section class="profile-block profile-modal__reveal">
+              <h3 class="label">Історія</h3>
+              <p class="body-text" data-profile-story></p>
+            </section>
+
+            <section class="profile-block profile-modal__reveal">
+              <h3 class="label">Досвід і мотивація</h3>
+              <p class="body-text" data-profile-experience></p>
+              <p class="body-text">
+                <em class="profile-modal__lead">Чому Neoversity:</em>
+                <span data-profile-motivation></span>
+              </p>
+            </section>
+
+            <section class="profile-block profile-modal__reveal">
+              <h3 class="label">Цілі</h3>
+              <p class="body-text" data-profile-goals></p>
+            </section>
+
+            <section class="profile-block profile-modal__reveal">
+              <h3 class="label">Після випуску</h3>
+              <p class="body-text" data-profile-after></p>
+            </section>
+
+            <section class="profile-block profile-block--power profile-modal__reveal">
+              <h3 class="label">Суперсила</h3>
+              <p class="body-text" data-profile-superpower></p>
+            </section>
+          </div>
+        </div>
+
+        <div class="profile-modal__nav">
+          <button class="profile-modal__nav-btn" type="button" data-profile-prev aria-label="Попередній учасник">
+            ←
+          </button>
+          <p class="profile-modal__counter" aria-live="polite">
+            <span data-profile-index>1</span> / <span data-profile-total>5</span>
+          </p>
+          <button class="profile-modal__nav-btn" type="button" data-profile-next aria-label="Наступний учасник">
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
