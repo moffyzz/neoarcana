@@ -1,0 +1,26 @@
+:root {
+  /* palette: "ink lavender" */
+  --bg: #12101A; /* page background */
+  --surface: #1D1A29; /* panels, modal, cards back */
+  --surface-2: #262236; /* raised/hover surface */
+  --border: #2F2A44; /* hairlines */
+  --text: #EEEAF2; /* main text */
+  --text-muted: #968FA6; /* secondary text */
+  --accent: #B9A7E8; /* frames, buttons, links, lines */
+  --accent-hover: #CDBFF2;
+  --on-accent: #12101A; /* text on accent buttons */
+
+  /* fonts — "Lora Variable" is the family name from @fontsource-variable/lora */
+  --font-display: "Philosopher", Georgia, "Times New Roman", serif;
+  --font-body: "Lora Variable", "Lora", Georgia, "Times New Roman", serif;
+
+  /* shape */
+  --radius-card: 14px;
+  --radius-ui: 10px;
+  --card-ratio: 2 / 3;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 0.25s;
+  --dur-med: 0.6s;
+}

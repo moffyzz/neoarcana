@@ -1,0 +1,24 @@
+---
+description: NEO Arcana design system and working rules
+alwaysApply: true
+---
+
+Project: NEO Arcana, a static one-page tarot-style team site (Vite + vanilla JS + plain CSS + GSAP).
+
+Sources of truth, read before changing anything:
+- CURSOR_PROMPT.md: full build spec and milestones.
+- DESIGN.md: short design reference (colors, fonts, shape, motion, accessibility).
+- src/data/team.json: all content.
+
+Rules:
+- Use colors only through CSS variables from src/styles/tokens.css. Never hardcode colors.
+- The per-member `--card-accent` is only for card glow and small profile details, never for UI chrome.
+- Fonts: Philosopher for headings, Lora for body. Both self-hosted via @fontsource with the cyrillic and latin subsets.
+- Animate only transform and opacity with GSAP. Respect prefers-reduced-motion.
+- UI text is Ukrainian. Code, comments and commit messages are English.
+- No new dependencies, no localStorage, no features that are not in CURSOR_PROMPT.md.
+- Work one milestone at a time. After a milestone, stop and tell me how to run it and what to check.
+- If a file from the spec is missing (logo SVG, team.json, a placeholder image), create it following the spec instead of asking.
+- vite.config.js must keep `base: './'`.
+- Keep each source file focused and under about 250 lines. Keep the browser console free of errors and warnings.
+- For a bug fix or small tweak, change only what was asked. No refactoring on the side.
