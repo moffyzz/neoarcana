@@ -14,7 +14,7 @@ export function initIntro() {
 
   mm.add('(prefers-reduced-motion: no-preference)', () => {
     const moon = document.querySelector('.logo-mark--hero .na-moon');
-    if (moon) gsap.set(moon, { transformOrigin: '50% 50%' });
+    if (moon) gsap.set(moon, { transformOrigin: '50% 50%', scale: 0.85 });
 
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
@@ -26,8 +26,13 @@ export function initIntro() {
       )
       .to(
         '.logo-mark--hero .na-moon',
-        { opacity: 1, scale: 1, duration: 0.45 },
-        0.7,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.45,
+          clearProps: 'transform,transformOrigin',
+        },
+        0.2,
       )
       .to(
         '.hero__letter',

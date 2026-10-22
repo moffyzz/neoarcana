@@ -119,6 +119,10 @@
   .header__logo:hover .na-moon {
     transform: rotate(12deg);
   }
+
+  .logo-mark--hero:hover .na-moon {
+    transform: rotate(8deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -131,7 +135,8 @@
     transform: none;
   }
 
-  .header__logo:hover .na-moon {
+  .header__logo:hover .na-moon,
+  .logo-mark--hero:hover .na-moon {
     transform: none;
   }
 

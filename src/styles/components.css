@@ -27,7 +27,8 @@
 
 .logo-mark--hero .na-moon {
   opacity: 0;
-  transform: scale(0.85);
+  transform-origin: 50% 50%;
+  transition: transform var(--dur-med) var(--ease-out);
 }
 
 .header__logo {
@@ -313,6 +314,7 @@
 }
 
 .flipcard {
+  height: 100%;
   perspective: 1200px;
   min-height: 0;
 }
@@ -320,6 +322,7 @@
 .flipcard__inner {
   position: relative;
   height: 100%;
+  min-height: 100%;
   transform-style: preserve-3d;
 }
 
@@ -366,6 +369,8 @@
   display: grid;
   gap: 0.7rem;
   align-content: start;
+  box-sizing: border-box;
+  height: 100%;
   min-height: 16rem;
   padding: 1.15rem 1.1rem 1.25rem;
   background: linear-gradient(165deg, var(--surface-2), var(--surface));
