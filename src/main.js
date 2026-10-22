@@ -23,7 +23,8 @@ renderPage();
 initHeader();
 initStars();
 initIntro();
-initDeck();
+// Modal before deck so a deep link can mark a card face-up before deal setup.
 initModal();
+initDeck();
 initSpread();
 initFinale();

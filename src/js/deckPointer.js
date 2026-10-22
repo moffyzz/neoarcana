@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { isFlipping } from './cardFlip.js';
 
 export function bindPointer(slots, api) {
   const offs = [];
@@ -12,6 +13,7 @@ export function bindPointer(slots, api) {
 
     const onMove = (event) => {
       if (!api.ready() || !card.classList.contains('is-hot')) return;
+      if (isFlipping() || card.classList.contains('is-flipping')) return;
       const box = tilt.getBoundingClientRect();
       const px = (event.clientX - box.left) / box.width - 0.5;
       const py = (event.clientY - box.top) / box.height - 0.5;
@@ -22,18 +24,26 @@ export function bindPointer(slots, api) {
         ease: 'power2.out',
         overwrite: 'auto',
       });
-      glare.style.setProperty('--gx', `${(px + 0.5) * 100}%`);
-      glare.style.setProperty('--gy', `${(py + 0.5) * 100}%`);
+      if (card.dataset.face !== 'down') {
+        glare.style.setProperty('--gx', `${(px + 0.5) * 100}%`);
+        glare.style.setProperty('--gy', `${(py + 0.5) * 100}%`);
+      }
     };
 
     const onEnter = () => {
       if (!api.ready()) return;
+      if (isFlipping() || card.classList.contains('is-flipping')) return;
       card.classList.add('is-hot');
       api.syncIdle();
       slot.style.zIndex = '8';
       gsap.to(lift, { y: -18, scale: 1.04, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
       gsap.to(glow, { opacity: 1, duration: 0.45, ease: 'power3.out' });
-      gsap.to(glare, { opacity: 0.9, duration: 0.35, ease: 'power3.out' });
+      // No glare on the card back — keeps the reverse clean.
+      gsap.to(glare, {
+        opacity: card.dataset.face === 'down' ? 0 : 0.9,
+        duration: 0.35,
+        ease: 'power3.out',
+      });
       nudge(slots, index, true);
     };
 
@@ -68,6 +78,7 @@ export function bindFocus(slots, api) {
     const onFocus = () => {
       requestAnimationFrame(() => {
         if (!api.ready() || !card.matches(':focus-visible')) return;
+        if (isFlipping() || card.classList.contains('is-flipping')) return;
         card.classList.add('is-hot');
         api.syncIdle();
         slot.style.zIndex = '8';

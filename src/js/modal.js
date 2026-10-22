@@ -6,6 +6,7 @@ import { fillProfile } from './modalContent.js';
 import { lockScroll, trapFocus, unlockScroll } from './modalFocus.js';
 import { createNavigator } from './modalNav.js';
 import { FLIGHT_DUR, flyArt, openCardFlight, restoreSourceCard } from './modalFlip.js';
+import { flipFaceUp, isFaceUp, isFlipping, setFaceUp } from './cardFlip.js';
 
 const HASH_RE = /^#\/card\/([^/]+)$/;
 
@@ -41,7 +42,7 @@ export function initModal() {
   });
 
   document.querySelectorAll('.card[data-id]').forEach((card) => {
-    card.addEventListener('click', () => openById(card.dataset.id, card));
+    card.addEventListener('click', () => onCardClick(card));
   });
   root.querySelectorAll('[data-modal-close]').forEach((el) => {
     el.addEventListener('click', closeFromUi);
@@ -82,6 +83,7 @@ function memberFromHash() {
 }
 
 function onHash() {
+  if (isFlipping()) return;
   const member = memberFromHash();
   if (member) {
     if (open && members[index]?.id === member.id) return;
@@ -91,7 +93,19 @@ function onHash() {
   if (open || !root.hidden) closeModal({ skipHash: true });
 }
 
+function onCardClick(card) {
+  if (!card?.dataset?.id) return;
+  if (isFaceUp(card)) {
+    openById(card.dataset.id, card);
+    return;
+  }
+  // Face-down: flip first, then open. Ignore while flipping or modal busy/open.
+  if (isFlipping() || busy || open) return;
+  flipFaceUp(card, () => openById(card.dataset.id, card));
+}
+
 function openById(id, sourceCard, opts = {}) {
+  if (isFlipping()) return;
   const next = members.findIndex((m) => m.id === id);
   if (next < 0 || busy) return;
   if (open && members[index]?.id === id) return;
@@ -265,6 +279,8 @@ function markAsViewed(id) {
   card.classList.add('is-viewed');
   const status = card.querySelector('.card__badge--status');
   if (status) status.textContent = 'ПЕРЕГЛЯНУТО';
+  // Instant face-up for hash/nav paths (and no-op if already up after a click flip).
+  setFaceUp(card);
 }
 
 function onKey(event) {

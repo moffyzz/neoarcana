@@ -81,11 +81,19 @@
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   background: radial-gradient(
     circle at var(--gx, 50%) var(--gy, 40%),
     color-mix(in srgb, var(--text) 48%, transparent),
     transparent 46%
   );
+}
+
+/* Keep the reverse clean — no mirrored glare while face-down. */
+.card[data-face='down'] .card__glare {
+  opacity: 0 !important;
+  visibility: hidden;
 }
 
 .count-roll {

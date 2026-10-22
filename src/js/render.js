@@ -1,6 +1,7 @@
 import team from '../data/team.json';
 import { assetUrl, initials, prefersReducedMotion } from './utils.js';
 import { cardImageUrl, mountSafeImage } from './media.js';
+import { setFaceDown } from './cardFlip.js';
 
 function bindText(selector, value) {
   const el = document.querySelector(selector);
@@ -57,6 +58,7 @@ export function initHeader() {
 }
 
 const LOGO_URL = assetUrl('assets/logo/neo-arcana-moon-card.svg');
+const CARD_BACK_URL = assetUrl('assets/cards/card-back.webp');
 
 function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -78,7 +80,7 @@ function renderDeck(members) {
 
   sorted.forEach((member, index) => {
     const slot = node('li', 'deck__slot');
-    slot.append(createCard(member, index === 0));
+    slot.append(createCard(member, index === 0, index, sorted.length));
     list.append(slot);
 
     const dot = node('button', 'deck__dot');
@@ -97,11 +99,14 @@ function renderDeck(members) {
   bindDeckDots(list, dots);
 }
 
-function createCard(member, preload) {
+function createCard(member, preload, index, total) {
   const card = node('button', 'card');
   card.type = 'button';
   card.dataset.id = member.id;
   card.style.setProperty('--card-accent', member.accent);
+  // index/total used via setFaceDown aria after mount into the deck list.
+  card.dataset.faceIndex = String(index + 1);
+  card.dataset.faceTotal = String(total);
 
   const float = node('span', 'card__float');
   const lift = node('span', 'card__lift');
@@ -116,12 +121,30 @@ function createCard(member, preload) {
   lift.append(tilt);
   float.append(glow, lift);
   card.append(float);
+  setFaceDown(card);
   return card;
 }
 
 function createBack() {
-  const face = node('span', 'card__face card__back');
+  const face = node('span', 'card__face card__back card__back--art');
   face.setAttribute('aria-hidden', 'true');
+
+  const img = node('img', 'card__back-img');
+  img.alt = '';
+  img.setAttribute('aria-hidden', 'true');
+  img.src = CARD_BACK_URL;
+  img.width = 1000;
+  img.height = 1500;
+  img.decoding = 'async';
+  img.addEventListener('error', () => restoreLogoBack(face), { once: true });
+  face.append(img);
+  return face;
+}
+
+/** Drop the art modifier and rebuild the classic logo reverse. */
+function restoreLogoBack(face) {
+  face.classList.remove('card__back--art');
+  face.replaceChildren();
   face.append(node('span', 'card__back-frame'));
 
   const logo = node('img', 'card__back-logo');
@@ -133,7 +156,6 @@ function createBack() {
   logo.loading = 'lazy';
   logo.decoding = 'async';
   face.append(logo);
-  return face;
 }
 
 function createFront(member, preload) {

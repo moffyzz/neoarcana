@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { onViewedChange } from './state.js';
 import { mountCounter } from './countRoll.js';
 import { bindFocus, bindPointer } from './deckPointer.js';
+import { isFaceUp, setFaceDown } from './cardFlip.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,7 +27,7 @@ export function initDeck() {
   mm.add(REDUCE, () => {
     deckReady = true;
     applyFan(slots);
-    gsap.set('.card__inner', { rotateY: 0 });
+    prepareFaceDown(slots);
     gsap.set('.card__float, .card__lift, .card__tilt', { clearProps: 'transform' });
     roll(0, false);
   });
@@ -58,6 +59,15 @@ function applyFan(slots) {
   });
 }
 
+/** Face-down resting state; never overwrite a card already revealed (e.g. deep link). */
+function prepareFaceDown(slots) {
+  slots.forEach((slot) => {
+    const card = slot.querySelector('.card');
+    if (!card || isFaceUp(card)) return;
+    setFaceDown(card);
+  });
+}
+
 function stackOffsets(slots) {
   gsap.set(slots, { x: 0, y: 0, rotation: 0 });
   const deck = document.querySelector('.deck');
@@ -76,14 +86,13 @@ function stackOffsets(slots) {
 function dealFan(slots) {
   deckReady = false;
   const offsets = stackOffsets(slots);
-  const inners = slots.map((slot) => slot.querySelector('.card__inner'));
   gsap.set(slots, {
     x: (i) => offsets[i].x,
     y: (i) => offsets[i].y,
     rotation: 0,
     transformOrigin: 'center bottom',
   });
-  gsap.set(inners, { rotateY: 180 });
+  prepareFaceDown(slots);
 
   const tl = gsap.timeline({
     paused: true,
@@ -101,8 +110,6 @@ function dealFan(slots) {
       y: fanValue(slot, '--fan-y'),
       rotation: fanValue(slot, '--fan-rot'),
     }, at);
-    tl.to(inners[i], { rotateY: 90, duration: 0.45, ease: 'power2.in' }, at);
-    tl.to(inners[i], { rotateY: 0, duration: 0.45, ease: 'power2.out' }, at + 0.45);
   });
 
   ScrollTrigger.create({
@@ -115,10 +122,10 @@ function dealFan(slots) {
 
 function dealInPlace(slots) {
   deckReady = false;
-  const inners = slots.map((slot) => slot.querySelector('.card__inner'));
   const lifts = slots.map((slot) => slot.querySelector('.card__lift'));
   gsap.set(slots, { clearProps: 'transform' });
-  gsap.set(inners, { rotateY: 180 });
+  prepareFaceDown(slots);
+  // Lift entrance remains; face stays down (no flip-to-front).
   gsap.set(lifts, { y: 20 });
 
   const tl = gsap.timeline({
@@ -130,7 +137,6 @@ function dealInPlace(slots) {
   });
 
   tl.to(lifts, { y: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' }, 0);
-  tl.to(inners, { rotateY: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' }, 0);
 
   ScrollTrigger.create({
     trigger: '#deck',
@@ -142,12 +148,10 @@ function dealInPlace(slots) {
 
 function startIdle(slots) {
   // Per-card timeline: hold (stagger) → ease 0→-4 → yoyo -4↔4.
-  // syncIdle pause/resume works on timelines the same as tweens.
   idleTweens = slots.map((slot, i) => {
     const float = slot.querySelector('.card__float');
     const floatDur = 5 + (i / Math.max(slots.length - 1, 1)) * 2;
     const tl = gsap.timeline({ paused: true });
-    // Stagger as a gap only — nothing is written to the float until this time.
     tl.to(float, { y: -4, duration: 1.2, ease: 'sine.out' }, i * 0.35);
     tl.to(float, {
       y: 4,
@@ -175,5 +179,3 @@ function syncIdle() {
     || document.querySelector('.card.is-hot');
   idleTweens.forEach((tween) => (paused ? tween.pause() : tween.resume()));
 }
-
-
