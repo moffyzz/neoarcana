@@ -11,6 +11,7 @@ import './styles/components.css';
 import './styles/about.css';
 import './styles/modal.css';
 import './styles/motion.css';
+import './styles/pointer.css';
 
 import { initHeader, renderPage } from './js/render.js';
 import { initStars } from './js/stars.js';
@@ -19,9 +20,11 @@ import { initDeck } from './js/deck.js';
 import { initModal } from './js/modal.js';
 import { initSpread } from './js/spread.js';
 import { initAbout } from './js/about.js';
+import { initPointer } from './js/pointer.js';
 
 renderPage();
 initHeader();
+initPointer();
 initStars();
 initIntro();
 // Modal before deck so a deep link can mark a card face-up before deal setup.

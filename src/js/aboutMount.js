@@ -1,9 +1,14 @@
-/** Build #about content from team.finale (static, no fog/candle). */
+/** Build #about content from team.finale with data-reveal hooks. */
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
   if (text != null) node.textContent = text;
+  return node;
+}
+
+function reveal(node, type) {
+  node.dataset.reveal = type;
   return node;
 }
 
@@ -22,8 +27,8 @@ export function mountAboutShell(shell, finale) {
 function buildNumbers(block) {
   const group = el('div', 'about__group about__group--numbers');
   group.append(
-    el('h3', 'about__label', block.title),
-    el('p', 'about__subtitle', block.subtitle),
+    reveal(el('h3', 'about__label', block.title), 'label'),
+    reveal(el('p', 'about__subtitle', block.subtitle), 'subtitle'),
   );
 
   const list = el('ul', 'about__numbers');
@@ -32,8 +37,8 @@ function buildNumbers(block) {
     cell.setAttribute('role', 'group');
     cell.setAttribute('aria-label', `${item.value} ${item.label}`);
     cell.append(
-      el('span', 'about__value', String(item.value)),
-      el('span', 'about__caption', item.label),
+      reveal(el('span', 'about__value', String(item.value)), 'number'),
+      reveal(el('span', 'about__caption', item.label), 'caption'),
     );
     list.append(cell);
   });
@@ -44,11 +49,13 @@ function buildNumbers(block) {
 
 function buildSkills(block) {
   const group = el('div', 'about__group about__group--skills');
-  group.append(el('h3', 'about__label', block.title));
+  group.append(reveal(el('h3', 'about__label', block.title), 'label'));
 
   const list = el('ul', 'about__tags');
   block.tags.forEach((tag) => {
-    list.append(el('li', 'about__tag', tag));
+    const item = el('li', 'about__tag');
+    item.append(reveal(el('span', 'about__tag-label', tag), 'tag'));
+    list.append(item);
   });
 
   group.append(list);
@@ -63,9 +70,9 @@ function buildTexts(paragraphs) {
     const isClosing = para.style === 'closing';
     const block = el('div', isClosing ? 'about__para about__para--closing' : 'about__para');
     if (para.label) {
-      block.append(el('span', 'about__para-label', para.label));
+      block.append(reveal(el('span', 'about__para-label', para.label), 'label'));
     }
-    block.append(el('p', 'about__para-text', para.text));
+    block.append(reveal(el('p', 'about__para-text', para.text), 'text'));
     wrap.append(block);
   });
 

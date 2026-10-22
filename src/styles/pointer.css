@@ -1,0 +1,60 @@
+.site-pointer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-120px, -120px, 0);
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.site-pointer.is-visible {
+  opacity: 1;
+}
+
+.site-pointer__glow {
+  position: absolute;
+  inset: -2.75rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 22%, transparent),
+    transparent 70%
+  );
+}
+
+.site-pointer__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 85%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.has-site-pointer,
+  html.has-site-pointer * {
+    cursor: none !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .site-pointer {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-site-pointer,
+  html.has-site-pointer * {
+    cursor: auto !important;
+  }
+
+  .site-pointer {
+    display: none;
+  }
+}
