@@ -62,6 +62,7 @@
       <nav class="header__nav" aria-label="Розділи">
         <a href="#deck">Колода</a>
         <a href="#team">Команда</a>
+        <a href="#about">Про нас</a>
       </nav>
     </header>
 
@@ -127,47 +128,19 @@
         <div class="spread-line" id="team-line" aria-hidden="true"></div>
       </section>
 
-      <section id="finale" class="section finale" aria-labelledby="finale-title">
-        <h2 class="title-section" id="finale-title" data-bind="worldTitle">Остання карта</h2>
-        <div class="world is-locked" id="world">
-          <button
-            class="world__card"
-            type="button"
-            data-world-card
-            aria-describedby="world-caption"
-          >
-            <span class="world__glow" aria-hidden="true"></span>
-            <span class="world__burst" aria-hidden="true"></span>
-            <span class="world__inner">
-              <span class="world__face world__back" aria-hidden="true">
-                <span class="world__back-frame"></span>
-                <img
-                  class="world__back-logo"
-                  src="./assets/logo/neo-arcana-moon-card.svg"
-                  alt=""
-                  width="96"
-                  height="140"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </span>
-              <span class="world__face world__front">
-                <span class="world__roman" data-bind="worldNumber">XXI</span>
-                <span class="label" data-bind="worldUk">Світ</span>
-                <p class="world__prophecy" data-world-prophecy></p>
-              </span>
-            </span>
-          </button>
-          <p class="world__caption" id="world-caption">
+      <section id="about" class="section about is-locked" aria-label="Про нас">
+        <div class="about__gate" data-about-gate>
+          <p class="about__gate-eyebrow">Про нас</p>
+          <p class="about__gate-caption">
             Відкрий усі п'ять карт, щоб побачити розклад повністю
-            <span class="world__progress">
-              <span data-finale-viewed>0</span> / <span data-finale-total>5</span>
-            </span>
           </p>
-          <button class="world__skip" type="button" data-world-skip>
-            Показати одразу
-          </button>
+          <p class="about__gate-progress" aria-live="polite">
+            <span data-about-viewed>0</span>
+            <span class="about__gate-progress-sep" aria-hidden="true">/</span>
+            <span data-about-total>5</span>
+          </p>
         </div>
+        <div class="about__shell" data-about-shell inert></div>
       </section>
     </main>
 

@@ -38,9 +38,6 @@ export function renderPage() {
   bindText('[data-bind="tagline"]', site.tagline);
   bindText('[data-bind="teamTitle"]', teamBlock.title);
   bindText('[data-bind="teamIntro"]', teamBlock.intro);
-  bindText('[data-bind="worldTitle"]', teamBlock.world.title);
-  bindText('[data-bind="worldNumber"]', teamBlock.world.number);
-  bindText('[data-bind="worldUk"]', teamBlock.world.uk);
   splitHeroTitle(site.title);
   renderDeck(team.members);
 }

@@ -8,6 +8,7 @@ import './styles/base.css';
 import './styles/layout.css';
 import './styles/deck.css';
 import './styles/components.css';
+import './styles/about.css';
 import './styles/modal.css';
 import './styles/motion.css';
 
@@ -17,7 +18,7 @@ import { initIntro } from './js/intro.js';
 import { initDeck } from './js/deck.js';
 import { initModal } from './js/modal.js';
 import { initSpread } from './js/spread.js';
-import { initFinale } from './js/finale.js';
+import { initAbout } from './js/about.js';
 
 renderPage();
 initHeader();
@@ -27,4 +28,4 @@ initIntro();
 initModal();
 initDeck();
 initSpread();
-initFinale();
+initAbout();

@@ -168,17 +168,4 @@
     transform: scaleX(1);
   }
 
-  .world.is-unlocked .world__inner {
-    transform: rotateY(0deg);
-  }
-
-  .world.is-unlocked .world__line,
-  .world.is-unlocked .world__burst {
-    opacity: 1;
-    transform: none;
-  }
-
-  .world__glow {
-    transform: none;
-  }
 }
