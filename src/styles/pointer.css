@@ -1,44 +1,208 @@
 .site-pointer {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   z-index: 10000;
-  width: 16px;
-  height: 16px;
-  margin: -8px 0 0 -8px;
   pointer-events: none;
   opacity: 0;
-  transform: translate3d(-120px, -120px, 0);
-  transition: opacity var(--dur-fast) var(--ease-out);
+  --pointer-accent: var(--accent);
+  --glow-size: 120px;
+  --ring-size: 22px;
+  --ring-w: var(--ring-size);
+  --ring-h: var(--ring-size);
+  --press-scale: 1;
+  transition: opacity 0.25s var(--ease-out);
 }
 
 .site-pointer.is-visible {
   opacity: 1;
 }
 
-.site-pointer__glow {
+.site-pointer.is-over-input {
+  opacity: 0;
+}
+
+.site-pointer__glow,
+.site-pointer__ring,
+.site-pointer__dot,
+.site-pointer__wave,
+.site-pointer__dust {
   position: absolute;
-  inset: -2.75rem;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.site-pointer__glow {
+  width: var(--glow-size);
+  height: var(--glow-size);
+  margin: calc(var(--glow-size) / -2) 0 0 calc(var(--glow-size) / -2);
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--accent) 22%, transparent),
+    color-mix(in srgb, var(--pointer-accent) 22%, transparent),
     transparent 70%
+  );
+  transition:
+    width 0.4s var(--ease-out),
+    height 0.4s var(--ease-out),
+    margin 0.4s var(--ease-out),
+    background 0.4s var(--ease-out),
+    opacity 0.2s var(--ease-out);
+}
+
+.site-pointer.is-about {
+  --glow-size: 300px;
+}
+
+.site-pointer.is-about .site-pointer__glow {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 30%, var(--accent-hover)),
+    color-mix(in srgb, var(--accent) 14%, transparent) 48%,
+    transparent 72%
   );
 }
 
 .site-pointer__ring {
-  position: absolute;
-  inset: 0;
+  display: block;
+  box-sizing: border-box;
+  width: calc(var(--ring-w) * var(--press-scale));
+  height: calc(var(--ring-h) * var(--press-scale));
+  margin-top: calc(var(--ring-h) * var(--press-scale) / -2);
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: calc(var(--ring-w) * var(--press-scale) / -2);
+  /* Width/height animated on purpose: single tiny fixed element (exception to transform/opacity-only). */
+  transition:
+    width 0.35s var(--ease-out),
+    height 0.35s var(--ease-out),
+    margin 0.35s var(--ease-out);
+}
+
+.site-pointer__ring-face {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   border: 1px solid color-mix(in srgb, var(--accent) 85%, transparent);
   box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+  transition:
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    border-radius 0.35s var(--ease-out),
+    opacity 0.25s var(--ease-out),
+    scale 0.25s var(--ease-out);
+}
+
+.site-pointer.is-card {
+  --ring-size: 40px;
+}
+
+.site-pointer.is-card .site-pointer__ring-face {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pointer-accent) 35%, transparent);
+}
+
+.site-pointer.is-magnetic {
+  --ring-size: 34px;
+}
+
+.site-pointer.is-pressed {
+  --press-scale: 0.8;
+  transition: opacity 0.25s var(--ease-out);
+}
+
+.site-pointer.is-morph.is-pressed {
+  --press-scale: 0.97;
+}
+
+.site-pointer.is-pressed .site-pointer__ring {
+  transition:
+    width 0.12s var(--ease-out),
+    height 0.12s var(--ease-out),
+    margin 0.12s var(--ease-out);
+}
+
+.site-pointer.is-entering {
+  --ring-size: 13px;
+}
+
+.site-pointer__dot {
+  z-index: 2;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 50%, transparent);
+  transition:
+    background-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    opacity 0.2s var(--ease-out);
+}
+
+.site-pointer__wave {
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  opacity: 0;
+  transition: border-color 0.2s var(--ease-out);
+}
+
+.site-pointer.is-on-light:not(.is-morph) .site-pointer__ring-face {
+  opacity: 0;
+  scale: 0.4;
+}
+
+.site-pointer.is-morph .site-pointer__ring-face {
+  border-radius: calc(var(--radius-ui) + 4px);
+  border-color: color-mix(in srgb, var(--accent-hover) 75%, transparent);
+  box-shadow: none;
+  opacity: 1;
+  scale: 1;
+}
+
+.site-pointer.is-on-light .site-pointer__dot {
+  opacity: 0;
+}
+
+.site-pointer.is-on-light .site-pointer__glow {
+  opacity: 0;
+}
+
+.site-pointer.is-on-light .site-pointer__wave {
+  border-color: color-mix(in srgb, var(--bg) 85%, transparent);
+}
+
+.site-pointer.is-morph .site-pointer__wave {
+  border-color: color-mix(in srgb, var(--accent-hover) 75%, transparent);
+}
+
+.site-pointer__dust {
+  width: 2px;
+  height: 2px;
+  margin: -1px 0 0 -1px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
   html.has-site-pointer,
   html.has-site-pointer * {
     cursor: none !important;
+  }
+
+  html.has-site-pointer input,
+  html.has-site-pointer textarea,
+  html.has-site-pointer select,
+  html.has-site-pointer [contenteditable],
+  html.has-site-pointer [contenteditable] * {
+    cursor: text !important;
   }
 }
 

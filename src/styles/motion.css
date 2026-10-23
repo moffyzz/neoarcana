@@ -135,6 +135,16 @@
     transform: none;
   }
 
+  .btn:hover::after,
+  .btn:focus-visible::after {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .btn:hover::before {
+    transform: none;
+  }
+
   .header__logo:hover .na-moon,
   .logo-mark--hero:hover .na-moon {
     transform: none;

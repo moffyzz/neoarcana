@@ -56,5 +56,9 @@ Personal member color `--card-accent` (from `team.json` → `accent`) is used ON
 - All content comes from `src/data/team.json`. Missing image = placeholder, never a broken image.
 - Tone of texts: warm, direct, no pathos.
 
+## Cursor
+- Desktop fine pointer only: layered custom cursor (exact 4px dot, lerped ring, slower glow) using `--accent`; system cursor hidden except over text fields.
+- States: grow/magnetic on links and buttons, member `--card-accent` + optional crescent on face-down cards, larger warm glow inside `#about`, press wave and light stardust; off for touch and `prefers-reduced-motion`.
+
 ## Never
-Light theme, new libraries, localStorage or cookies, backend, analytics, sound, video, custom cursor, features nobody asked for.
+Light theme, new libraries, localStorage or cookies, backend, analytics, sound, video, features nobody asked for.
