@@ -9,6 +9,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis owns wheel easing; CSS smooth would double-ease anchors/programmatic scroll. */
+html.lenis {
+  scroll-behavior: auto;
+}
+
 body {
   margin: 0;
   min-height: 100svh;
@@ -19,12 +24,42 @@ body {
   font-weight: 400;
   line-height: 1.7;
   overflow-x: clip;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Avoid blue drag-highlight on interactive / hero UI (keep about + modal text selectable). */
+.hero,
+.hero *,
+.site-header,
+.card,
+.card *,
+.deck,
+.flipcard,
+.site-pointer,
+button {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 img,
 svg {
   display: block;
   max-width: 100%;
+  -webkit-user-drag: none;
+}
+
+input,
+textarea,
+[contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--text);
 }
 
 h1,

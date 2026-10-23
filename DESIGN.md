@@ -38,6 +38,7 @@ Personal member color `--card-accent` (from `team.json` → `accent`) is used ON
 - GSAP only (ScrollTrigger, Flip). Animate only `transform` and `opacity`.
 - Default ease `power3.out`, durations 0.25–0.9s.
 - Everything wrapped in `gsap.matchMedia()`: reduced motion = final states instantly; hover tilt only on `(hover: hover) and (pointer: fine)`; lighter on mobile.
+- Wheel smoothing: Lenis, duration 1.1, desktop only.
 - No heavy effects, no scroll hijacking, no WebGL.
 
 ## Layout
@@ -61,4 +62,4 @@ Personal member color `--card-accent` (from `team.json` → `accent`) is used ON
 - States: grow/magnetic on links and buttons, member `--card-accent` + optional crescent on face-down cards, larger warm glow inside `#about`, press wave and light stardust; off for touch and `prefers-reduced-motion`.
 
 ## Never
-Light theme, new libraries, localStorage or cookies, backend, analytics, sound, video, features nobody asked for.
+Light theme, libraries beyond the allowed gsap and lenis (Lenis only for desktop fine-pointer wheel smoothing, off on touch and prefers-reduced-motion), localStorage or cookies, backend, analytics, sound, video, features nobody asked for.

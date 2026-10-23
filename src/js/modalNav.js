@@ -4,7 +4,13 @@ import { prefersReducedMotion } from './utils.js';
 
 export function createNavigator({ root, getMembers, getIndex, setIndex, markAsViewed, setBusy, isBusy }) {
   function updateChrome() {
-    root.querySelector('[data-profile-index]').textContent = String(getIndex() + 1);
+    const members = getMembers();
+    const i = getIndex();
+    root.querySelector('[data-profile-index]').textContent = String(i + 1);
+    const prev = root.querySelector('[data-profile-prev]');
+    const next = root.querySelector('[data-profile-next]');
+    if (prev) prev.disabled = i === 0;
+    if (next) next.disabled = i === members.length - 1;
   }
 
   function switchTo(next, dir = next > getIndex() ? 1 : -1) {
@@ -46,7 +52,8 @@ export function createNavigator({ root, getMembers, getIndex, setIndex, markAsVi
   function step(dir) {
     const members = getMembers();
     if (isBusy() || members.length < 2) return null;
-    const next = (getIndex() + dir + members.length) % members.length;
+    const next = getIndex() + dir;
+    if (next < 0 || next >= members.length) return null;
     return switchTo(next, dir);
   }
 

@@ -16,7 +16,7 @@ Rules:
 - Fonts: Philosopher for headings, Lora for body. Both self-hosted via @fontsource with the cyrillic and latin subsets.
 - Animate only transform and opacity with GSAP. Respect prefers-reduced-motion.
 - UI text is Ukrainian. Code, comments and commit messages are English.
-- No new dependencies, no localStorage, no features that are not in CURSOR_PROMPT.md.
+- Allowed runtime libraries are exactly gsap and lenis (Lenis only for desktop fine-pointer wheel smoothing, off on touch and prefers-reduced-motion); no others without approval. No localStorage, no features that are not in CURSOR_PROMPT.md.
 - Work one milestone at a time. After a milestone, stop and tell me how to run it and what to check.
 - If a file from the spec is missing (logo SVG, team.json, a placeholder image), create it following the spec instead of asking.
 - vite.config.js must keep `base: './'`.

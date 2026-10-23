@@ -13,15 +13,18 @@ gsap.registerPlugin(ScrollTrigger);
 const TOTAL = team.members.length;
 const REDUCE = '(prefers-reduced-motion: reduce)';
 const MOBILE = '(max-width: 639px)';
+const UNIT_SEL = '.about__number, .about__tag, .about__para, .about__label, .about__subtitle';
+const LOCK_T = 0.85;
+const GLOW_MS = 1800;
 
 /** Soft default blur; cursor clears to sharp + accent glow. */
 const REVEAL = {
   label: { opacity: 0.48, blur: 2.5, radius: 170 },
   subtitle: { opacity: 0.46, blur: 2, radius: 170 },
-  number: { opacity: 0.24, blur: 7, radius: 170 },
-  caption: { opacity: 0.4, blur: 2.5, radius: 150 },
+  number: { opacity: 0.14, blur: 11, radius: 170 },
+  caption: { opacity: 0.28, blur: 4, radius: 150 },
   tag: { opacity: 0.44, blur: 3, radius: 150 },
-  text: { opacity: 0.55, blur: 1.6, radius: 160 },
+  text: { opacity: 0.35, blur: 4.5, radius: 160 },
 };
 
 let section;
@@ -36,6 +39,10 @@ let ptrInside = false;
 let raf = 0;
 let mobileMq;
 let reduceMq;
+/** @type {Set<Element>} */
+let revealedUnits = new Set();
+/** @type {WeakMap<Element, number>} */
+let glowAt = new WeakMap();
 
 export function initAbout() {
   section = document.querySelector('#about');
@@ -102,7 +109,7 @@ function bindReveal() {
     return;
   }
 
-  paintAll(0);
+  paintFrame();
   shell.addEventListener('pointermove', onPointerMove, { passive: true });
   shell.addEventListener('pointerleave', onPointerLeave);
   shell.addEventListener('pointercancel', onPointerLeave);
@@ -114,65 +121,89 @@ function onMotionChange() {
     clearReveal();
     return;
   }
-  paintAll(ptrInside ? null : 0);
+  paintFrame();
 }
 
 function onPointerMove(event) {
   ptrX = event.clientX;
   ptrY = event.clientY;
   ptrInside = true;
-  if (!raf) raf = requestAnimationFrame(tick);
+  startLoop();
 }
 
 function onPointerLeave() {
   ptrInside = false;
+  startLoop();
+}
+
+function startLoop() {
   if (!raf) raf = requestAnimationFrame(tick);
 }
 
 function tick() {
   raf = 0;
-  if (!ptrInside) {
-    paintAll(0);
-    return;
-  }
-  nodes.forEach((node) => {
-    const type = node.dataset.reveal;
-    const cfg = REVEAL[type] || REVEAL.text;
-    const rect = node.getBoundingClientRect();
-    const dist = distToRect(ptrX, ptrY, rect);
-    const t = softFalloff(dist, cfg.radius);
-    applyReveal(node, cfg, t);
-  });
+  const decaying = paintFrame();
+  if (ptrInside || decaying) raf = requestAnimationFrame(tick);
 }
 
-function paintAll(forcedT) {
+/** @returns {boolean} true if any revealed glow is still decaying */
+function paintFrame() {
+  let decaying = false;
+  const now = performance.now();
+
   nodes.forEach((node) => {
     const cfg = REVEAL[node.dataset.reveal] || REVEAL.text;
-    if (forcedT == null) {
-      const rect = node.getBoundingClientRect();
-      applyReveal(node, cfg, softFalloff(distToRect(ptrX, ptrY, rect), cfg.radius));
-      return;
-    }
-    applyReveal(node, cfg, forcedT);
+    const unit = getUnit(node);
+    const falloff = ptrInside
+      ? softFalloff(distToRect(ptrX, ptrY, node.getBoundingClientRect()), cfg.radius)
+      : 0;
+
+    if (falloff >= LOCK_T) lockUnit(unit, now);
+
+    const locked = revealedUnits.has(unit);
+    const sharpT = locked ? 1 : falloff;
+    const glowT = glowFor(unit, falloff, now, locked);
+    if (locked && glowT > 0.02) decaying = true;
+    applyReveal(node, cfg, sharpT, glowT);
   });
+
+  return decaying;
 }
 
-function applyReveal(node, cfg, t) {
-  const lit = Math.pow(t, 0.85);
+function getUnit(node) {
+  return node.closest(UNIT_SEL) || node;
+}
+
+function lockUnit(unit, now) {
+  if (revealedUnits.has(unit)) return;
+  revealedUnits.add(unit);
+  glowAt.set(unit, now);
+}
+
+function glowFor(unit, falloffT, now, locked) {
+  const near = Math.pow(falloffT, 0.85);
+  if (!locked) return near;
+  const started = glowAt.get(unit) || now;
+  const rest = Math.max(0, 1 - (now - started) / GLOW_MS) * 0.35;
+  return Math.max(near, rest);
+}
+
+function applyReveal(node, cfg, sharpT, glowT) {
+  const lit = Math.pow(sharpT, 0.85);
   const mobileCap = cfg.blur >= 6 ? 4 : 3;
   const baseBlur = mobileMq.matches ? Math.min(cfg.blur, mobileCap) : cfg.blur;
   const opacity = cfg.opacity + (1 - cfg.opacity) * lit;
-  const blur = baseBlur * (1 - t);
+  const blur = baseBlur * (1 - sharpT);
   node.style.opacity = String(opacity);
   node.style.filter = blur > 0.04 ? `blur(${blur.toFixed(2)}px)` : 'none';
 
-  if (lit <= 0.02) {
+  if (glowT <= 0.02) {
     node.style.textShadow = '';
     return;
   }
 
-  const glowNear = (8 * lit).toFixed(1);
-  const glowFar = (18 * lit).toFixed(1);
+  const glowNear = (8 * glowT).toFixed(1);
+  const glowFar = (18 * glowT).toFixed(1);
   node.style.textShadow = [
     `0 0 ${glowNear}px color-mix(in srgb, var(--accent) 55%, transparent)`,
     `0 0 ${glowFar}px color-mix(in srgb, var(--accent) 28%, transparent)`,
@@ -180,6 +211,8 @@ function applyReveal(node, cfg, t) {
 }
 
 function clearReveal() {
+  revealedUnits = new Set();
+  glowAt = new WeakMap();
   nodes.forEach((node) => {
     node.style.opacity = '';
     node.style.filter = '';

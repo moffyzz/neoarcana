@@ -12,8 +12,10 @@ import './styles/about.css';
 import './styles/modal.css';
 import './styles/motion.css';
 import './styles/pointer.css';
+import 'lenis/dist/lenis.css';
 
 import { initHeader, renderPage } from './js/render.js';
+import { initSmoothScroll } from './js/smoothScroll.js';
 import { initStars } from './js/stars.js';
 import { initIntro } from './js/intro.js';
 import { initDeck } from './js/deck.js';
@@ -23,6 +25,7 @@ import { initAbout } from './js/about.js';
 import { initPointer } from './js/pointer.js';
 
 renderPage();
+initSmoothScroll();
 initHeader();
 initPointer();
 initStars();

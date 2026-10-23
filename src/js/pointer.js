@@ -145,6 +145,11 @@ function onMove(event) {
 
   if (!visible || needsSnap) showEnter();
 
+  // Refresh after unlock while the pointer is already inside #about.
+  if (event.target instanceof Element) {
+    setAbout(!!event.target.closest('#about.is-unlocked'));
+  }
+
   spawnDust();
   startLoop();
 }
@@ -289,7 +294,7 @@ function onOver(event) {
     if (magnet) setMagnet(magnet);
   }
 
-  setAbout(!!t.closest('#about'));
+  setAbout(!!t.closest('#about.is-unlocked'));
 }
 
 function onOut(event) {
@@ -316,7 +321,7 @@ function onOut(event) {
   }
 
   if (overAbout && t.closest('#about')) {
-    if (!(related instanceof Element) || !related.closest('#about')) {
+    if (!(related instanceof Element) || !related.closest('#about.is-unlocked')) {
       setAbout(false);
     }
   }

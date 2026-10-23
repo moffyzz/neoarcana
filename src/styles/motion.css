@@ -145,6 +145,11 @@
     transform: none;
   }
 
+  .about__gate::before {
+    animation: none;
+    opacity: 0.85;
+  }
+
   .header__logo:hover .na-moon,
   .logo-mark--hero:hover .na-moon {
     transform: none;

@@ -176,6 +176,7 @@
       <div class="profile-modal__backdrop" data-modal-close tabindex="-1"></div>
       <div
         class="profile-modal__panel"
+        data-lenis-prevent
         role="dialog"
         aria-modal="true"
         aria-labelledby="profile-name"
@@ -227,7 +228,7 @@
             <div class="profile-modal__links" data-profile-links hidden></div>
           </div>
 
-          <div class="profile-modal__body" data-profile-body>
+          <div class="profile-modal__body" data-profile-body data-lenis-prevent>
             <p class="label profile-modal__reveal" data-profile-label></p>
             <h2 class="title-name profile-modal__reveal" id="profile-name" data-profile-name></h2>
             <p class="profile-modal__power profile-modal__reveal" data-profile-power></p>

@@ -1,3 +1,5 @@
+import { getLenis } from './smoothScroll.js';
+
 const FOCUSABLE = [
   'a[href]',
   'button:not([disabled])',
@@ -35,11 +37,22 @@ export function trapFocus(event, root) {
 
 export function lockScroll() {
   const y = window.scrollY;
+  const lenis = getLenis();
+  if (lenis) {
+    lenis.scrollTo(y, { immediate: true, force: true });
+    lenis.stop();
+  }
   document.body.classList.add('is-modal-open');
   return y;
 }
 
 export function unlockScroll(y) {
   document.body.classList.remove('is-modal-open');
-  window.scrollTo(0, y || 0);
+  const lenis = getLenis();
+  if (lenis) {
+    lenis.scrollTo(y || 0, { immediate: true, force: true });
+    lenis.start();
+  } else {
+    window.scrollTo(0, y || 0);
+  }
 }
