@@ -205,63 +205,68 @@
           </svg>
         </button>
 
-        <div class="profile-modal__layout">
-          <div class="profile-modal__media">
-            <div class="profile-modal__portrait" data-profile-portrait>
-              <div class="profile-modal__art" data-profile-art>
-                <img
-                  class="profile-modal__img"
-                  data-profile-img
-                  alt=""
-                  width="1200"
-                  height="1500"
-                  loading="lazy"
-                  decoding="async"
-                  hidden
-                />
-                <div class="profile-modal__ph" data-profile-ph aria-hidden="true">
-                  <span class="card__roman" data-profile-roman></span>
-                  <span class="card__initials" data-profile-initials></span>
+        <div class="profile-modal__scroll" data-lenis-prevent>
+          <div class="profile-modal__layout">
+            <div class="profile-modal__media">
+              <div class="profile-modal__portrait" data-profile-portrait>
+                <div class="profile-modal__art" data-profile-art>
+                  <img
+                    class="profile-modal__img"
+                    data-profile-img
+                    alt=""
+                    width="1200"
+                    height="1500"
+                    loading="lazy"
+                    decoding="async"
+                    hidden
+                  />
+                  <div class="profile-modal__ph" data-profile-ph aria-hidden="true">
+                    <span class="card__roman" data-profile-roman></span>
+                    <span class="card__initials" data-profile-initials></span>
+                  </div>
                 </div>
               </div>
+              <div class="profile-modal__links" data-profile-links hidden></div>
             </div>
-            <div class="profile-modal__links" data-profile-links hidden></div>
-          </div>
 
-          <div class="profile-modal__body" data-profile-body data-lenis-prevent>
-            <p class="label profile-modal__reveal" data-profile-label></p>
-            <h2 class="title-name profile-modal__reveal" id="profile-name" data-profile-name></h2>
-            <p class="profile-modal__power profile-modal__reveal" data-profile-power></p>
-            <hr class="profile-modal__rule profile-modal__reveal" />
+            <div class="profile-modal__body" data-profile-body data-lenis-prevent>
+              <h1
+                class="profile-modal__name profile-modal__reveal"
+                id="profile-name"
+                data-profile-name
+              ></h1>
+              <p class="profile-modal__arcana profile-modal__reveal" data-profile-label></p>
+              <div class="profile-modal__accent-rule profile-modal__reveal" aria-hidden="true"></div>
+              <p class="profile-modal__quote profile-modal__reveal" data-profile-power></p>
+              <p class="profile-modal__superpower profile-modal__reveal" data-profile-superpower></p>
+              <p class="profile-modal__story profile-modal__reveal" data-profile-story></p>
 
-            <section class="profile-block profile-modal__reveal">
-              <h3 class="label">Історія</h3>
-              <p class="body-text" data-profile-story></p>
-            </section>
+              <div class="profile-modal__columns profile-modal__reveal">
+                <section class="profile-modal__block">
+                  <h3 class="profile-modal__heading">Шлях</h3>
+                  <p class="profile-modal__detail">
+                    <em class="profile-modal__runin">Досвід:</em>
+                    <span data-profile-experience></span>
+                  </p>
+                  <p class="profile-modal__detail">
+                    <em class="profile-modal__runin">Чому Neoversity:</em>
+                    <span data-profile-motivation></span>
+                  </p>
+                </section>
 
-            <section class="profile-block profile-modal__reveal">
-              <h3 class="label">Досвід і мотивація</h3>
-              <p class="body-text" data-profile-experience></p>
-              <p class="body-text">
-                <em class="profile-modal__lead">Чому Neoversity:</em>
-                <span data-profile-motivation></span>
-              </p>
-            </section>
-
-            <section class="profile-block profile-modal__reveal">
-              <h3 class="label">Цілі</h3>
-              <p class="body-text" data-profile-goals></p>
-            </section>
-
-            <section class="profile-block profile-modal__reveal">
-              <h3 class="label">Після випуску</h3>
-              <p class="body-text" data-profile-after></p>
-            </section>
-
-            <section class="profile-block profile-block--power profile-modal__reveal">
-              <h3 class="label">Суперсила</h3>
-              <p class="body-text" data-profile-superpower></p>
-            </section>
+                <section class="profile-modal__block">
+                  <h3 class="profile-modal__heading">Що далі</h3>
+                  <p class="profile-modal__detail">
+                    <em class="profile-modal__runin">Цілі:</em>
+                    <span data-profile-goals></span>
+                  </p>
+                  <p class="profile-modal__detail">
+                    <em class="profile-modal__runin">Після випуску:</em>
+                    <span data-profile-after></span>
+                  </p>
+                </section>
+              </div>
+            </div>
           </div>
         </div>
 

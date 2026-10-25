@@ -7,6 +7,13 @@ import { lockScroll, trapFocus, unlockScroll } from './modalFocus.js';
 import { createNavigator } from './modalNav.js';
 import { FLIGHT_DUR, flyArt, openCardFlight, restoreSourceCard } from './modalFlip.js';
 import { flipFaceUp, isFaceUp, isFlipping, setFaceUp } from './cardFlip.js';
+import {
+  clearScrollLocks,
+  handleModalScrollKey,
+  initModalScroll,
+  refreshScrollState,
+  resetScroll,
+} from './modalScroll.js';
 
 const HASH_RE = /^#\/card\/([^/]+)$/;
 
@@ -40,6 +47,8 @@ export function initModal() {
     setBusy: (value) => { busy = value; },
     isBusy: () => busy,
   });
+
+  initModalScroll(panel, root.querySelector('[data-profile-body]'));
 
   document.querySelectorAll('.card[data-id]').forEach((card) => {
     card.addEventListener('click', () => onCardClick(card));
@@ -119,6 +128,10 @@ function openById(id, sourceCard, opts = {}) {
   index = next;
   returnFocus = sourceCard || document.querySelector(`.card[data-id="${id}"]`);
   fillProfile(root, members[index]);
+  resetScroll();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => refreshScrollState());
+  });
   nav.updateChrome();
   markAsViewed(members[index].id);
   if (!opts.fromHash) setCardHash(id, 'push');
@@ -229,6 +242,7 @@ function closeModal(opts = {}) {
 
   const finishClose = () => {
     closeGate = null;
+    clearScrollLocks();
     root.hidden = true;
     root.setAttribute('aria-hidden', 'true');
     root.setAttribute('inert', '');
@@ -297,5 +311,6 @@ function onKey(event) {
     if (card) returnFocus = card;
     return;
   }
+  if (handleModalScrollKey(event)) return;
   trapFocus(event, panel);
 }

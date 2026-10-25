@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { fillProfile } from './modalContent.js';
 import { prefersReducedMotion } from './utils.js';
+import { refreshScrollState, resetScroll } from './modalScroll.js';
 
 export function createNavigator({ root, getMembers, getIndex, setIndex, markAsViewed, setBusy, isBusy }) {
   function updateChrome() {
@@ -29,7 +30,13 @@ export function createNavigator({ root, getMembers, getIndex, setIndex, markAsVi
     const portrait = root.querySelector('[data-profile-portrait]');
     const dx = dir >= 0 ? 24 : -24;
 
-    const apply = () => fillProfile(root, member);
+    const apply = () => {
+      fillProfile(root, member);
+      resetScroll();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => refreshScrollState());
+      });
+    };
 
     if (prefersReducedMotion()) {
       apply();

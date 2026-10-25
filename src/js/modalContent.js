@@ -4,7 +4,7 @@ import { mountSafeImage, portraitImageUrl, cardImageUrl } from './media.js';
 export function fillProfile(root, member) {
   root.style.setProperty('--card-accent', member.accent);
 
-  setText(root, '[data-profile-label]', `${member.arcana.number} · ${member.arcana.uk}`);
+  setText(root, '[data-profile-label]', `${member.arcana.uk}, ${member.arcana.number}`);
   setText(root, '[data-profile-name]', member.name);
   setText(root, '[data-profile-power]', member.superpowerShort);
   setText(root, '[data-profile-story]', member.story);
