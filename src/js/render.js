@@ -173,10 +173,12 @@ function createFront(member, preload) {
 
   const placeholder = node('span', 'card__placeholder');
   placeholder.setAttribute('aria-hidden', 'true');
-  placeholder.append(
-    node('span', 'card__roman', member.arcana.number),
-    node('span', 'card__initials', initials(member.name)),
-  );
+  if (member.cardImage) {
+    placeholder.append(
+      node('span', 'card__roman', member.arcana.number),
+      node('span', 'card__initials', initials(member.name)),
+    );
+  }
 
   art.append(img, placeholder);
   mountSafeImage(img, placeholder, [cardImageUrl(member.cardImage)], {

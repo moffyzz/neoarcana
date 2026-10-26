@@ -13,8 +13,9 @@ export function fillProfile(root, member) {
   setText(root, '[data-profile-goals]', member.goals);
   setText(root, '[data-profile-after]', member.afterGraduation);
   setText(root, '[data-profile-superpower]', member.superpower);
-  setText(root, '[data-profile-roman]', member.arcana.number);
-  setText(root, '[data-profile-initials]', initials(member.name));
+  const anonymous = !member.cardImage;
+  setText(root, '[data-profile-roman]', anonymous ? '' : member.arcana.number);
+  setText(root, '[data-profile-initials]', anonymous ? '' : initials(member.name));
 
   mountPortrait(root, member);
   mountLinks(root, member.links);
