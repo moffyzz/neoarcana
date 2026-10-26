@@ -7,6 +7,7 @@
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox — hide page scrollbar */
 }
 
 /* Lenis owns wheel easing; CSS smooth would double-ease anchors/programmatic scroll. */
@@ -126,22 +127,8 @@ a:hover {
   outline-offset: 3px;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: var(--radius-ui);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--surface-2);
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge — hide page scrollbar */
 }
 
 .title-hero {
