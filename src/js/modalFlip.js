@@ -177,6 +177,7 @@ export function restoreSourceCard(card) {
 
 function settleSource(card) {
   card.classList.remove('is-hot');
+  document.dispatchEvent(new CustomEvent('deck:sync-idle'));
   const lift = card.querySelector('.card__lift');
   const tilt = card.querySelector('.card__tilt');
   gsap.killTweensOf([lift, tilt]);

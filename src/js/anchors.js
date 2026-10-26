@@ -2,7 +2,7 @@
 
 import { getLenis } from './smoothScroll.js';
 
-const ANCHOR_DURATION = 1.2;
+const ANCHOR_DURATION = 2.2;
 
 function isPrimaryClick(event) {
   return event.button === 0

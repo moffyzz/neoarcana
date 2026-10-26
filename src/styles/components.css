@@ -37,6 +37,9 @@
   min-width: 44px;
   min-height: 44px;
   color: var(--accent);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .logo-mark--header {
@@ -205,6 +208,17 @@
   transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Outer accent ring — does not shrink the content box / flight art rect. */
+.card__face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .card__back {

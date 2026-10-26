@@ -7,6 +7,47 @@
   pointer-events: none;
 }
 
+.viewport-blur-top,
+.viewport-blur-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  pointer-events: none;
+  z-index: 90;
+}
+
+.viewport-blur-top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bg) 45%, transparent) 0%,
+    transparent 100%
+  );
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+}
+
+.viewport-blur-bottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--bg) 45%, transparent) 0%,
+    transparent 100%
+  );
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
+}
+
+body.is-modal-open .viewport-blur-top,
+body.is-modal-open .viewport-blur-bottom {
+  opacity: 0;
+}
+
 main {
   position: relative;
   z-index: 1;
@@ -16,8 +57,8 @@ main {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  z-index: 20;
+  width: 100%;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -26,15 +67,15 @@ main {
   padding: max(0.35rem, env(safe-area-inset-top))
     max(1rem, env(safe-area-inset-right)) 0.35rem
     max(1rem, env(safe-area-inset-left));
-  background: transparent;
-  transition:
-    background-color var(--dur-fast) var(--ease-out),
-    backdrop-filter var(--dur-fast) var(--ease-out);
-}
-
-.site-header.is-scrolled {
-  background: color-mix(in srgb, var(--bg) 80%, transparent);
-  backdrop-filter: blur(10px);
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-bottom: none !important;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 body.is-modal-open .site-header {
@@ -46,6 +87,9 @@ body.is-modal-open .site-header {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .header__nav a {
@@ -59,6 +103,9 @@ body.is-modal-open .site-header {
   text-transform: uppercase;
   text-decoration: none;
   color: var(--text);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .header__nav a:hover {

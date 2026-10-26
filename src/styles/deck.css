@@ -71,6 +71,8 @@
     scroll-padding-inline: 14vw;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    padding-block: 1.5rem;
+    margin-block: -1.5rem;
   }
 
   .deck-scroller::-webkit-scrollbar {

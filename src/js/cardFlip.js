@@ -51,6 +51,7 @@ export function flipFaceUp(card, onComplete) {
   flipping = true;
   card.classList.add('is-flipping');
   card.classList.remove('is-hot');
+  document.dispatchEvent(new CustomEvent('deck:sync-idle'));
 
   const tilt = card.querySelector('.card__tilt');
   gsap.killTweensOf(tilt);

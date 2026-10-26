@@ -11,7 +11,7 @@ const FINE_POINTER = '(hover: hover) and (pointer: fine) and (prefers-reduced-mo
 const MOTION = '(prefers-reduced-motion: no-preference)';
 const REDUCE = '(prefers-reduced-motion: reduce)';
 
-let idleTweens = [];
+let idle = [];
 let deckReady = false;
 
 export function initDeck() {
@@ -148,7 +148,8 @@ function dealInPlace(slots) {
 
 function startIdle(slots) {
   // Per-card timeline: hold (stagger) → ease 0→-4 → yoyo -4↔4.
-  idleTweens = slots.map((slot, i) => {
+  idle = slots.map((slot, i) => {
+    const card = slot.querySelector('.card');
     const float = slot.querySelector('.card__float');
     const floatDur = 5 + (i / Math.max(slots.length - 1, 1)) * 2;
     const tl = gsap.timeline({ paused: true });
@@ -160,22 +161,26 @@ function startIdle(slots) {
       yoyo: true,
       repeat: -1,
     });
-    return tl;
+    return { tl, card };
   });
   syncIdle();
 
   const observer = new MutationObserver(syncIdle);
   observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('deck:sync-idle', syncIdle);
   return () => {
     observer.disconnect();
-    idleTweens.forEach((tween) => tween.kill());
-    idleTweens = [];
+    document.removeEventListener('deck:sync-idle', syncIdle);
+    idle.forEach(({ tl }) => tl.kill());
+    idle = [];
   };
 }
 
 function syncIdle() {
-  const paused = !deckReady
-    || document.body.classList.contains('is-modal-open')
-    || document.querySelector('.card.is-hot');
-  idleTweens.forEach((tween) => (paused ? tween.pause() : tween.resume()));
+  const globalPause = !deckReady
+    || document.body.classList.contains('is-modal-open');
+  idle.forEach(({ tl, card }) => {
+    if (globalPause || card?.classList.contains('is-hot')) tl.pause();
+    else tl.resume();
+  });
 }
