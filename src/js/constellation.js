@@ -21,10 +21,10 @@ const POSITIONS = [
   [288, 120],
 ];
 
-/** Halo radius in viewBox units (~88px glow at 640px rendered width). */
-const HALO_R = 22;
-const CORE_R = 2.75;
-const RING_R = 8;
+/** Smaller dots/halos; asterism span (viewBox + positions) unchanged. */
+const HALO_R = 11.5;
+const CORE_R = 1.65;
+const RING_R = 4.75;
 
 /** Gate constellation: viewed stars + close-triggered finale. */
 export function initConstellation({ gate, members }) {
@@ -108,7 +108,7 @@ export function initConstellation({ gate, members }) {
       chainTl = applySteps(svg, starIds, steps, lightStar, true);
       if (!chainTl || result.fromY == null) return;
       const fromY = result.fromY;
-      chainTl.to({}, { duration: 0.45 });
+      chainTl.to({}, { duration: 1.0 });
       chainTl.call(() => {
         if (gen !== chainGen) return;
         if (document.body.classList.contains('is-modal-open')) return;
@@ -210,6 +210,7 @@ function applySteps(svg, starIds, steps, lightStar, animate) {
 function flashGroup(group, { animate = true } = {}) {
   const halo = group.querySelector('.constellation__halo--lit');
   const core = group.querySelector('.constellation__core');
+  const ring = group.querySelector('.constellation__ring');
   if (!halo || !core) return;
 
   halo.removeAttribute('transform');
@@ -217,9 +218,11 @@ function flashGroup(group, { animate = true } = {}) {
 
   if (!animate || prefersReducedMotion()) {
     gsap.set(halo, { opacity: 0.9 });
+    if (ring) ring.classList.remove('is-waving');
     return;
   }
 
+  // Soft lavender flash: opacity on lit halo only (bob twinkle stays separate).
   gsap.killTweensOf(halo);
   gsap.set(halo, { opacity: 0 });
   gsap.timeline().to(halo, {
@@ -228,6 +231,14 @@ function flashGroup(group, { animate = true } = {}) {
       { opacity: 0.9, duration: 0.35, ease: 'power2.inOut' },
     ],
   });
+
+  // Retrigger one expanding ring wave each time this star lights.
+  if (ring) {
+    ring.classList.remove('is-waving');
+    // Force reflow so the CSS animation can restart.
+    void ring.getBoundingClientRect();
+    ring.classList.add('is-waving');
+  }
 }
 
 function buildSvg(members) {

@@ -16,8 +16,8 @@ const SCROLL_KEYS = new Set([
 ]);
 
 /** Shared trip between the deck and the constellation. */
-const TRAVEL_S = 1.45;
-const travelEase = (t) => 1 - (1 - t) ** 4;
+const TRAVEL_S = 2.1;
+const travelEase = (t) => 1 - (1 - t) ** 3;
 
 let finaleScheduled = false;
 let finaleDone = false;
