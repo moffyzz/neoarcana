@@ -12,6 +12,12 @@
   --accent-hover: #CDBFF2;
   --on-accent: #12101A; /* text on accent buttons */
 
+  /* eclipse finale */
+  --eclipse-veil: #05040A;
+  --eclipse-sun-core: #F3EEFF;
+  --eclipse-moon-hi: #14111F;
+  --eclipse-moon-lo: #07060D;
+
   /* fonts — "Lora Variable" is the family name from @fontsource-variable/lora */
   --font-display: "Philosopher", Georgia, "Times New Roman", serif;
   --font-body: "Lora Variable", "Lora", Georgia, "Times New Roman", serif;

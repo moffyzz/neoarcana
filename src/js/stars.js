@@ -1,8 +1,13 @@
-import { cssRgb, prefersReducedMotion } from './utils.js';
+import { cssRgb } from './utils.js';
 
 const MOBILE_MQ = '(max-width: 639px)';
 const MAX_PARALLAX = 40;
 const MAX_DPR = 2;
+const MAX_METEORS = 2;
+const GAP_MIN = 8000;
+const GAP_MAX = 20000;
+const LIFE_MIN = 800;
+const LIFE_MAX = 1600;
 
 function starCount() {
   return window.matchMedia(MOBILE_MQ).matches
@@ -32,6 +37,31 @@ function makeStars(width, height, count) {
   return stars;
 }
 
+function makeMeteor(width, height) {
+  const text = cssRgb('--text');
+  const accent = cssRgb('--accent');
+  const goRight = Math.random() > 0.45;
+  const startX = goRight
+    ? Math.random() * width * 0.55
+    : width * 0.45 + Math.random() * width * 0.55;
+  const startY = Math.random() * height * 0.35;
+  const dist = Math.min(width, height) * (0.35 + Math.random() * 0.35);
+  const angle = goRight
+    ? Math.PI * 0.18 + Math.random() * 0.22
+    : Math.PI - (Math.PI * 0.18 + Math.random() * 0.22);
+  const life = LIFE_MIN + Math.random() * (LIFE_MAX - LIFE_MIN);
+  return {
+    x0: startX,
+    y0: startY,
+    dx: Math.cos(angle) * dist,
+    dy: Math.sin(angle) * dist,
+    len: 48 + Math.random() * 56,
+    born: 0,
+    life,
+    color: Math.random() > 0.55 ? accent : text,
+  };
+}
+
 export function initStars() {
   const canvas = document.querySelector('.starfield');
   if (!canvas) return;
@@ -43,11 +73,17 @@ export function initStars() {
   let height = 0;
   let dpr = 1;
   let stars = [];
+  let meteors = [];
   let frameId = 0;
   let scrollY = window.scrollY;
   let running = false;
+  let nextMeteorAt = 0;
 
   const reducedMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function scheduleNext(now) {
+    nextMeteorAt = now + GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
+  }
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
@@ -57,11 +93,58 @@ export function initStars() {
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     stars = makeStars(width, height, starCount());
+    meteors = [];
     draw(0, true);
   }
 
   function parallax() {
     return Math.min(scrollY * 0.04, MAX_PARALLAX);
+  }
+
+  function spawnMeteors(now) {
+    if (reducedMq.matches || meteors.length >= MAX_METEORS) return;
+    if (now < nextMeteorAt) return;
+    // Prefer one at a time: only spawn a second rarely while one is live.
+    if (meteors.length === 1 && Math.random() > 0.08) {
+      scheduleNext(now);
+      return;
+    }
+    const m = makeMeteor(width, height);
+    m.born = now;
+    meteors.push(m);
+    scheduleNext(now + m.life);
+  }
+
+  function drawMeteors(now, shift) {
+    meteors = meteors.filter((m) => now - m.born < m.life);
+    for (const m of meteors) {
+      const u = (now - m.born) / m.life;
+      const fade = u < 0.15 ? u / 0.15 : u > 0.7 ? (1 - u) / 0.3 : 1;
+      const x = m.x0 + m.dx * u;
+      const y = m.y0 + m.dy * u + shift;
+      const speed = Math.hypot(m.dx, m.dy) || 1;
+      const tx = (m.dx / speed) * m.len;
+      const ty = (m.dy / speed) * m.len;
+      const { r, g, b } = m.color;
+
+      const grad = ctx.createLinearGradient(x - tx, y - ty, x, y);
+      grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0)`);
+      grad.addColorStop(0.55, `rgba(${r}, ${g}, ${b}, ${0.22 * fade})`);
+      grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${0.85 * fade})`);
+
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.15;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x - tx, y - ty);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.95 * fade})`;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.35, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   function draw(time, freeze) {
@@ -79,6 +162,11 @@ export function initStars() {
       ctx.arc(star.x, star.y + shift, star.size, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    if (!freeze) {
+      spawnMeteors(time);
+      drawMeteors(time, shift);
+    }
   }
 
   function loop(time) {
@@ -89,16 +177,19 @@ export function initStars() {
 
   function start() {
     if (running || reducedMq.matches || document.hidden) {
+      meteors = [];
       draw(0, true);
       return;
     }
     running = true;
+    scheduleNext(performance.now() + GAP_MIN * 0.5);
     frameId = window.requestAnimationFrame(loop);
   }
 
   function stop() {
     running = false;
     window.cancelAnimationFrame(frameId);
+    meteors = [];
   }
 
   function onVisibility() {

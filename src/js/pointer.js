@@ -214,6 +214,16 @@ function hideOrb() {
   stopLoop();
 }
 
+/** Clear GSAP/inline opacity left by Eclipse so the orb can show again. */
+export function restorePointerVisibility() {
+  if (!root) return;
+  root.style.removeProperty('opacity');
+  if (!armed || !fineMq?.matches || reduceMq?.matches) return;
+  visible = true;
+  root.classList.add('is-visible');
+  needsSnap = true;
+}
+
 function clearLightStates() {
   root.classList.remove('is-on-light', 'is-morph');
   root.style.removeProperty('--ring-w');

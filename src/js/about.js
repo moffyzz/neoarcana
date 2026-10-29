@@ -31,6 +31,8 @@ let section;
 let gate;
 let shell;
 let unlocked = false;
+/** When true, constellation owns unlock; auto paths no-op. */
+let unlockClaimed = false;
 let near = false;
 let nodes = [];
 let ptrX = 0;
@@ -62,21 +64,30 @@ export function initAbout() {
 
   onViewedChange((count) => {
     updateProgress(count);
-    if (isReady() && near) unlock();
+    if (!unlockClaimed && isReady() && near) unlock();
   });
   onProfileClose(() => {
-    if (isReady() && near) unlock();
+    if (!unlockClaimed && isReady() && near) unlock();
   });
 
   ScrollTrigger.create({
     trigger: '#about',
     start: 'top 85%',
     end: 'bottom top',
-    onEnter: () => { near = true; if (isReady()) unlock(); },
-    onEnterBack: () => { near = true; if (isReady()) unlock(); },
+    onEnter: () => { near = true; if (!unlockClaimed && isReady()) unlock(); },
+    onEnterBack: () => { near = true; if (!unlockClaimed && isReady()) unlock(); },
     onLeave: () => { near = false; },
     onLeaveBack: () => { near = false; },
   });
+}
+
+/** Constellation claims unlock ownership; auto paths stay off until unlockAbout(). */
+export function claimUnlock() {
+  unlockClaimed = true;
+}
+
+export function unlockAbout() {
+  unlock();
 }
 
 function isReady() {

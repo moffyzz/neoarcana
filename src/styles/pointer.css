@@ -1,7 +1,8 @@
 .site-pointer {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  /* Above #eclipse (11000) so the custom cursor shows on the finale overlay. */
+  z-index: 12000;
   pointer-events: none;
   opacity: 0;
   --pointer-accent: var(--accent);

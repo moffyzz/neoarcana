@@ -9,11 +9,15 @@ export function viewedCount() {
   return viewedIds.size;
 }
 
+export function isViewed(id) {
+  return Boolean(id && viewedIds.has(id));
+}
+
 export function markViewed(id) {
   if (!id || viewedIds.has(id)) return viewedIds.size;
   viewedIds.add(id);
   const count = viewedIds.size;
-  listeners.forEach((listener) => listener(count));
+  listeners.forEach((listener) => listener(count, id));
   return count;
 }
 

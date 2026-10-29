@@ -59,6 +59,7 @@
 
 .about__gate-eyebrow {
   margin: 0;
+  padding-left: 0.28em;
   font-family: var(--font-display);
   font-size: 0.75rem;
   font-weight: 700;
@@ -77,24 +78,152 @@
   color: var(--text);
 }
 
+.about__constellation {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.constellation {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  overflow: visible;
+}
+
+.constellation [data-lines] {
+  pointer-events: none;
+}
+
+.constellation__bob,
+.constellation__halo,
+.constellation__core,
+.constellation__ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  pointer-events: none;
+}
+
+/* Unlit: lavender glow ~56px (r 40 scaled to ~0.7). */
+.constellation__halo--dim {
+  opacity: 0.95;
+  transform: scale(0.7);
+  transition: opacity 300ms ease;
+}
+
+.constellation__halo--lit {
+  opacity: 0;
+}
+
+.constellation__core {
+  fill: color-mix(in srgb, var(--accent) 58%, var(--text));
+  transition: fill 300ms ease;
+}
+
+.constellation__ring {
+  stroke: var(--accent);
+  stroke-width: 1.25;
+  opacity: 0;
+}
+
+.constellation__star.is-lit .constellation__halo--dim {
+  opacity: 0;
+}
+
+.constellation__star.is-lit .constellation__halo--lit {
+  opacity: 0.9;
+}
+
+.constellation__star.is-lit .constellation__core {
+  fill: color-mix(in srgb, var(--accent) 82%, var(--text));
+}
+
+@media (max-width: 639px) {
+  /* ~44px unlit / ~64px lit at ~310px rendered width. */
+  .constellation__halo--dim {
+    transform: scale(0.55);
+  }
+}
+
+@media (min-width: 768px) {
+  .about__constellation {
+    width: min(100%, calc(640px + 32px));
+    max-width: none;
+    margin: -2.5rem auto 1.75rem;
+    padding: 12px 16px;
+  }
+
+  .constellation {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    overflow: visible;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .constellation__bob {
+    animation: constellation-twinkle 3.2s ease-in-out infinite;
+  }
+
+  /* g[data-lines] is nth-of-type(1); stars follow as 2..6 */
+  .constellation__star:nth-of-type(2) .constellation__bob { animation-delay: 0s; }
+  .constellation__star:nth-of-type(3) .constellation__bob { animation-delay: 0.6s; }
+  .constellation__star:nth-of-type(4) .constellation__bob { animation-delay: 1.2s; }
+  .constellation__star:nth-of-type(5) .constellation__bob { animation-delay: 1.8s; }
+  .constellation__star:nth-of-type(6) .constellation__bob { animation-delay: 2.4s; }
+
+  .constellation__star.is-lit .constellation__ring {
+    animation: constellation-ring 700ms ease-out forwards;
+  }
+
+  @keyframes constellation-twinkle {
+    0%,
+    100% {
+      opacity: 0.65;
+      transform: scale(0.85);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes constellation-ring {
+    from {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+
+    to {
+      opacity: 0;
+      transform: scale(2.2);
+    }
+  }
+}
+
 .about__gate-progress {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 0.35em;
-  margin: 0.25rem 0 0;
+  gap: 0.2em;
+  margin: 0.15rem 0 0;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.75rem, 9vw, 4.5rem);
+  font-size: clamp(0.95rem, 2.4vw, 1.15rem);
   line-height: 1;
-  color: var(--accent);
-  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
 }
 
 .about__gate-progress-sep {
   font-weight: 400;
   opacity: 0.55;
-  font-size: 0.72em;
+  font-size: 0.85em;
 }
 
 .about__shell {

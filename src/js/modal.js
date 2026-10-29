@@ -66,8 +66,8 @@ export function initModal() {
     const card = nav.step(dir);
     if (card) returnFocus = card;
   };
-  root.querySelector('[data-profile-prev]').addEventListener('click', () => remember(-1));
-  root.querySelector('[data-profile-next]').addEventListener('click', () => remember(1));
+  root.querySelector('[data-profile-prev]')?.addEventListener('click', () => remember(-1));
+  root.querySelector('[data-profile-next]')?.addEventListener('click', () => remember(1));
   document.addEventListener('keydown', onKey);
   window.addEventListener('hashchange', onHash);
   window.addEventListener('popstate', onHash);
@@ -301,8 +301,6 @@ function markAsViewed(id) {
   const card = document.querySelector(`.card[data-id="${id}"]`);
   if (!card) return;
   card.classList.add('is-viewed');
-  const status = card.querySelector('.card__badge--status');
-  if (status) status.textContent = 'ПЕРЕГЛЯНУТО';
   // Instant face-up for hash/nav paths (and no-op if already up after a click flip).
   setFaceUp(card);
 }

@@ -366,17 +366,6 @@
   left: 0.7rem;
 }
 
-.card__badge--status {
-  right: 0.7rem;
-  max-width: calc(52% - 0.5rem);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 400;
-  font-size: 0.875rem;
-  letter-spacing: 0.04em;
-}
-
 .card .title-name {
   line-height: 1.05;
 }

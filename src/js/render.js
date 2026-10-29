@@ -187,7 +187,6 @@ function createFront(member, preload) {
   });
 
   const numeral = node('span', 'card__badge card__badge--num', member.arcana.number);
-  const status = node('span', 'card__badge card__badge--status', 'ВІДКРИТИ');
   const copy = node('span', 'card__copy');
   copy.append(
     node('span', 'label', member.arcana.uk),
@@ -195,7 +194,7 @@ function createFront(member, preload) {
     node('span', 'card__power', member.superpowerShort),
   );
 
-  face.append(art, node('span', 'card__shade'), numeral, status, copy);
+  face.append(art, node('span', 'card__shade'), numeral, copy);
   return face;
 }
 

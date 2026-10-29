@@ -289,50 +289,26 @@
   padding: 0.75rem 1rem 1rem;
 }
 
-.profile-modal__nav-btn {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-ui);
-  background: transparent;
-  color: var(--text);
-  font-size: 1.15rem;
-  cursor: pointer;
-}
-
-.profile-modal__close,
-.profile-modal__nav-btn {
+.profile-modal__close {
   transition:
     border-color 200ms ease,
     box-shadow 200ms ease;
 }
 
-.profile-modal__close:hover,
-.profile-modal__nav-btn:hover:not(:disabled) {
+.profile-modal__close:hover {
   border-color: color-mix(in srgb, var(--border) 55%, var(--text));
   box-shadow: 0 0 12px color-mix(in srgb, var(--border) 35%, transparent);
 }
 
-.profile-modal__close:focus-visible,
-.profile-modal__nav-btn:focus-visible:not(:disabled) {
+.profile-modal__close:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-color: color-mix(in srgb, var(--border) 55%, var(--text));
   box-shadow: none;
 }
 
-.profile-modal__nav-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  pointer-events: none;
-  box-shadow: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .profile-modal__close,
-  .profile-modal__nav-btn {
+  .profile-modal__close {
     transition: none;
   }
 }
@@ -347,12 +323,6 @@
 body.is-modal-open {
   overflow: hidden;
   touch-action: none;
-}
-
-.card.is-viewed .card__badge--status {
-  color: var(--text-muted);
-  border-color: color-mix(in srgb, var(--border) 90%, transparent);
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
 @media (max-width: 639px) {
@@ -403,15 +373,9 @@ body.is-modal-open {
 
   .profile-modal__nav {
     flex: 0 0 auto;
-    gap: 28px;
     padding: 0.5rem 1rem calc(0.5rem + env(safe-area-inset-bottom));
     border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
     background: var(--surface);
-  }
-
-  .profile-modal__nav-btn {
-    width: 52px;
-    height: 52px;
   }
 
   .profile-modal__media {
@@ -524,15 +488,9 @@ body.is-modal-open {
   .profile-modal__nav {
     flex: 0 0 auto;
     justify-content: center;
-    gap: 28px;
     padding: 0.625rem 1rem calc(0.625rem + env(safe-area-inset-bottom));
     border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
     background: var(--surface);
-  }
-
-  .profile-modal__nav-btn {
-    width: 52px;
-    height: 52px;
   }
 
   .profile-modal__portrait {
