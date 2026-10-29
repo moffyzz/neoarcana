@@ -175,6 +175,13 @@ export function restoreSourceCard(card) {
   if (art) gsap.set(art, { clearProps: 'opacity' });
 }
 
+/** Clear flight opacity on every deck card art (not modal portrait). */
+export function restoreAllCardArt() {
+  document.querySelectorAll('.card__art').forEach((art) => {
+    gsap.set(art, { clearProps: 'opacity' });
+  });
+}
+
 function settleSource(card) {
   card.classList.remove('is-hot');
   document.dispatchEvent(new CustomEvent('deck:sync-idle'));

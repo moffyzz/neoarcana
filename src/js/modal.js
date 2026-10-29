@@ -5,7 +5,13 @@ import { prefersReducedMotion } from './utils.js';
 import { fillProfile } from './modalContent.js';
 import { lockScroll, trapFocus, unlockScroll } from './modalFocus.js';
 import { createNavigator } from './modalNav.js';
-import { FLIGHT_DUR, flyArt, openCardFlight, restoreSourceCard } from './modalFlip.js';
+import {
+  FLIGHT_DUR,
+  flyArt,
+  openCardFlight,
+  restoreAllCardArt,
+  restoreSourceCard,
+} from './modalFlip.js';
 import { flipFaceUp, isFaceUp, isFlipping, setFaceUp } from './cardFlip.js';
 import {
   clearScrollLocks,
@@ -148,6 +154,8 @@ function showModal(sourceCard) {
   root.removeAttribute('inert');
   root.setAttribute('aria-hidden', 'false');
 
+  restoreAllCardArt();
+
   const reduced = prefersReducedMotion();
   const reveals = root.querySelectorAll('.profile-modal__reveal');
   const backdrop = root.querySelector('.profile-modal__backdrop');
@@ -249,6 +257,7 @@ function closeModal(opts = {}) {
     gsap.set([backdrop, panel, art, body, navBar, closeBtn], {
       clearProps: 'opacity,transform,visibility',
     });
+    restoreAllCardArt();
     restoreSourceCard(focusEl);
     busy = false;
     unlockScroll(scrollY);
@@ -261,6 +270,7 @@ function closeModal(opts = {}) {
   };
 
   if (reduced) {
+    restoreAllCardArt();
     restoreSourceCard(focusEl);
     gsap.to([backdrop, panel], { opacity: 0, duration: 0.15 });
     closeGate = gsap.delayedCall(0.2, finishClose);
