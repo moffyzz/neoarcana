@@ -185,10 +185,22 @@
 }
 
 .eclipse__logo {
+  display: block;
   width: 56px;
   height: auto;
   margin-top: 0.35rem;
+  color: var(--accent);
+  overflow: visible;
   opacity: 0;
+}
+
+.eclipse__logo .na-card-outline {
+  stroke: currentColor;
+  fill: none;
+}
+
+.eclipse__logo .na-moon {
+  fill: currentColor;
 }
 
 .eclipse__restart {

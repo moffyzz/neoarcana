@@ -1,6 +1,6 @@
 /** Eclipse overlay DOM builders. */
 
-export function buildOverlay(copy, logoUrl) {
+export function buildOverlay(copy) {
   const root = document.createElement('div');
   root.id = 'eclipse';
   root.setAttribute('role', 'dialog');
@@ -20,15 +20,7 @@ export function buildOverlay(copy, logoUrl) {
   title.setAttribute('aria-label', copy.title);
   title.append(...splitLetters(copy.title));
   const subtitle = el('p', 'eclipse__subtitle', copy.tagline);
-  const badge = document.createElement('img');
-  badge.className = 'eclipse__logo';
-  badge.src = logoUrl;
-  badge.alt = '';
-  badge.width = 56;
-  badge.height = 82;
-  badge.decoding = 'async';
-  badge.setAttribute('aria-hidden', 'true');
-  text.append(title, subtitle, badge);
+  text.append(title, subtitle, buildLogoBadge());
 
   const restart = document.createElement('button');
   restart.type = 'button';
@@ -37,6 +29,39 @@ export function buildOverlay(copy, logoUrl) {
 
   root.append(veil, stage, stars, text, restart);
   return root;
+}
+
+/** Inline moon-card so only the crescent can shift; card outline stays put. */
+function buildLogoBadge() {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'eclipse__logo logo-mark');
+  svg.setAttribute('viewBox', '0 0 52 76');
+  svg.setAttribute('aria-hidden', 'true');
+
+  const outline = document.createElementNS(NS, 'path');
+  outline.setAttribute('class', 'na-card-outline');
+  outline.setAttribute(
+    'd',
+    'M8 2H44A6 6 0 0 1 50 8V68A6 6 0 0 1 44 74H8A6 6 0 0 1 2 68V8A6 6 0 0 1 8 2Z',
+  );
+  outline.setAttribute('fill', 'none');
+  outline.setAttribute('stroke', 'currentColor');
+  outline.setAttribute('stroke-width', '2.4');
+  outline.setAttribute('stroke-linejoin', 'round');
+
+  const moon = document.createElementNS(NS, 'path');
+  moon.setAttribute('class', 'na-moon');
+  moon.setAttribute(
+    'd',
+    'M40.42 25.23A15 15 0 1 0 40.42 50.77A12.8 12.8 0 1 1 40.42 25.23Z',
+  );
+  moon.setAttribute('fill', 'currentColor');
+  // Nudge crescent left inside the card; outline path is untouched.
+  moon.setAttribute('transform', 'translate(-3.5 0)');
+
+  svg.append(outline, moon);
+  return svg;
 }
 
 function splitLetters(value) {

@@ -5,12 +5,11 @@ import { buildOverlay } from './eclipseDom.js';
 import { createEclipseStars } from './eclipseStars.js';
 import { buildReducedTimeline, buildTimeline, resetVisuals } from './eclipseTimeline.js';
 import { getLenis } from './smoothScroll.js';
-import { assetUrl, prefersReducedMotion } from './utils.js';
+import { prefersReducedMotion } from './utils.js';
 
 export const ENABLE_ECLIPSE = true;
 export const AUTO_TRIGGER_AT_BOTTOM = false;
 
-const LOGO_URL = assetUrl('assets/logo/neo-arcana-moon-card.svg');
 const FADE_OUT = 0.8;
 const AUTO_HOLD_MS = 2500;
 
@@ -42,7 +41,7 @@ export function initEclipse({ site, finale } = {}) {
   logo.replaceWith(trigger);
   trigger.append(logo);
 
-  const overlay = buildOverlay(copy, LOGO_URL);
+  const overlay = buildOverlay(copy);
   overlay.hidden = true;
   document.body.append(overlay);
 
