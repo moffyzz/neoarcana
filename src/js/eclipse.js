@@ -1,10 +1,12 @@
 /** Eclipse finale — STEP 4: controls + cleanup. Footer logo is the trigger. */
 
 import gsap from 'gsap';
+import team from '../data/team.json';
 import { buildOverlay } from './eclipseDom.js';
 import { createEclipseStars } from './eclipseStars.js';
 import { buildReducedTimeline, buildTimeline, resetVisuals } from './eclipseTimeline.js';
 import { getLenis } from './smoothScroll.js';
+import { onViewedChange, viewedCount } from './state.js';
 import { prefersReducedMotion } from './utils.js';
 
 export const ENABLE_ECLIPSE = true;
@@ -12,6 +14,8 @@ export const AUTO_TRIGGER_AT_BOTTOM = false;
 
 const FADE_OUT = 0.8;
 const AUTO_HOLD_MS = 2500;
+const TOTAL = team.members.length;
+const LOCKED_LABEL = 'Спочатку відкрий усі карти та текст «Про нас»';
 
 const FALLBACK = {
   button: 'Завершити розклад',
@@ -19,6 +23,12 @@ const FALLBACK = {
   restart: 'Почати знову',
   tagline: "П'ять людей. П'ять арканів. Один розклад.",
 };
+
+/** True when every card is viewed and About text is unlocked. */
+function isSpreadReady() {
+  const about = document.querySelector('#about');
+  return viewedCount() >= TOTAL && !!about?.classList.contains('is-unlocked');
+}
 
 /** Footer moon-card trigger; full eclipse controls for STEP 3. */
 export function initEclipse({ site, finale } = {}) {
@@ -63,6 +73,7 @@ export function initEclipse({ site, finale } = {}) {
     document.querySelector('.site-footer'),
   ].filter(Boolean);
   const starField = createEclipseStars(els.stars);
+  const about = document.querySelector('#about');
 
   let playing = false;
   let atEnd = false;
@@ -70,19 +81,31 @@ export function initEclipse({ site, finale } = {}) {
   let timeline = null;
   let autoTimer = 0;
 
-  const syncModal = () => {
-    const locked = document.body.classList.contains('is-modal-open');
-    trigger.disabled = locked || playing || closing;
+  const syncTrigger = () => {
+    const modalOpen = document.body.classList.contains('is-modal-open');
+    const ready = isSpreadReady();
+    trigger.disabled = modalOpen || playing || closing || !ready;
     trigger.setAttribute('aria-disabled', trigger.disabled ? 'true' : 'false');
+    trigger.setAttribute('aria-label', ready ? copy.button : LOCKED_LABEL);
   };
-  syncModal();
-  new MutationObserver(syncModal).observe(document.body, {
+  syncTrigger();
+  onViewedChange(syncTrigger);
+  new MutationObserver(syncTrigger).observe(document.body, {
     attributes: true,
     attributeFilter: ['class'],
   });
+  if (about) {
+    new MutationObserver(syncTrigger).observe(about, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+  }
 
   const canStart = () =>
-    !playing && !closing && !document.body.classList.contains('is-modal-open');
+    isSpreadReady()
+    && !playing
+    && !closing
+    && !document.body.classList.contains('is-modal-open');
 
   const markEnd = () => {
     atEnd = true;
@@ -95,7 +118,7 @@ export function initEclipse({ site, finale } = {}) {
     autoTimer = 0;
     playing = true;
     atEnd = false;
-    syncModal();
+    syncTrigger();
     gsap.killTweensOf(overlay);
     overlay.hidden = false;
     gsap.set(overlay, { opacity: 1 });
@@ -117,7 +140,7 @@ export function initEclipse({ site, finale } = {}) {
   const restart = () => {
     if (overlay.hidden || closing) return;
     closing = true;
-    syncModal();
+    syncTrigger();
     timeline?.kill();
     timeline = null;
     starField.stop();
@@ -133,7 +156,7 @@ export function initEclipse({ site, finale } = {}) {
       playing = false;
       atEnd = false;
       closing = false;
-      syncModal();
+      syncTrigger();
       scrollToTop();
       trigger.focus({ preventScroll: true });
     };
